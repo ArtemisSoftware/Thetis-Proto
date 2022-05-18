@@ -12,15 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.artemissoftware.thetisproto.ThetisScreen
 
 @ExperimentalMaterialApi
 @Composable
-fun ColorCard(
-    color: Color,
-    colorName: String,
-    onClick: () -> Unit
+fun AlphaCard(
+    onClick: () -> Unit,
+    alphaValue: String
 ) {
 
     Card(
@@ -28,24 +29,19 @@ fun ColorCard(
 
         },
         elevation = 10.dp,
-        border = BorderStroke(1.dp, Color.Blue),
         modifier = Modifier.padding(4.dp)
     ) {
 
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.width(100.dp).padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(20.dp)
-                    .clip(CircleShape)
-                    .background(color)
+
+            Text(
+                text = "$alphaValue Alpha",
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center
             )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Text(text = colorName)
         }
 
     }
@@ -54,10 +50,9 @@ fun ColorCard(
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
-private fun DefaultPreview() {
-    ColorCard(
-        color = Color.Magenta,
-        colorName = "Magenta",
+private fun AlphaCardPreview() {
+    AlphaCard(
+        alphaValue = "0.5",
         onClick = {}
     )
 }

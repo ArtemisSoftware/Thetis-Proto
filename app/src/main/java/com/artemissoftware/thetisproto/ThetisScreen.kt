@@ -1,6 +1,7 @@
 package com.artemissoftware.thetisproto
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -9,8 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.artemissoftware.thetisproto.composables.AlphaCard
 import com.artemissoftware.thetisproto.composables.ColorCard
 
+@ExperimentalMaterialApi
 @Composable
 fun ThetisScreen() {
 
@@ -59,14 +62,27 @@ fun ThetisScreen() {
         }
 
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Row {
 
+            AlphaCard(
+                alphaValue = "0.5",
+                onClick = {}
+            )
+            AlphaCard(
+                alphaValue = "0.5",
+                onClick = {}
+            )
+            AlphaCard(
+                alphaValue = "0.5",
+                onClick = {}
+            )
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 private fun ThetisPreview() {
