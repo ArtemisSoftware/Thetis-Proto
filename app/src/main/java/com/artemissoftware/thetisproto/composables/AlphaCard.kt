@@ -20,15 +20,17 @@ import com.artemissoftware.thetisproto.ThetisScreen
 @ExperimentalMaterialApi
 @Composable
 fun AlphaCard(
-    onClick: () -> Unit,
-    alphaValue: String
+    alphaValue: Float,
+    onClick: (Float) -> Unit,
+    isSelected: Boolean = false
 ) {
 
     Card(
         onClick = {
-
+            onClick(alphaValue)
         },
         elevation = 10.dp,
+        border = BorderStroke(1.dp, if(isSelected) Color.Blue else Color.White),
         modifier = Modifier.padding(4.dp)
     ) {
 
@@ -52,7 +54,7 @@ fun AlphaCard(
 @Composable
 private fun AlphaCardPreview() {
     AlphaCard(
-        alphaValue = "0.5",
-        onClick = {}
+        alphaValue = 0.5f,
+        onClick = {_->}
     )
 }

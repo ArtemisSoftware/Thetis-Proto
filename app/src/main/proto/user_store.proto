@@ -5,5 +5,5 @@ option java_multiple_files = true;
 
 message UserStore {
     string color = 1;
-    string alpha = 2;
+    float alpha = 2;
 }

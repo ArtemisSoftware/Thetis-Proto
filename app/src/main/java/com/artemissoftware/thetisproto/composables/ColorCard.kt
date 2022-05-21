@@ -20,15 +20,16 @@ import androidx.compose.ui.unit.dp
 fun ColorCard(
     color: Color,
     colorName: String,
-    onClick: () -> Unit
+    isSelected: Boolean =  false,
+    onClick: (String) -> Unit
 ) {
 
     Card(
         onClick = {
-
+            onClick(colorName)
         },
         elevation = 10.dp,
-        border = BorderStroke(1.dp, Color.Blue),
+        border = BorderStroke(1.dp, if(isSelected) Color.Blue else Color.White),
         modifier = Modifier.padding(4.dp)
     ) {
 
@@ -58,6 +59,6 @@ private fun DefaultPreview() {
     ColorCard(
         color = Color.Magenta,
         colorName = "Magenta",
-        onClick = {}
+        onClick = {_ ->}
     )
 }

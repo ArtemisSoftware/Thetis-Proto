@@ -1,15 +1,26 @@
 package com.artemissoftware.thetisproto.repository
 
+import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import com.artemissoftware.thetisproto.UserStore
+import com.artemissoftware.thetisproto.serializer.UserStoreSerializer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-class UserRepository(private val protoDataStore: DataStore<UserStore>) {
+private val DATA_STORE_FILE_NAME = "user_store.pb"
+val Context.userDataStore: DataStore<UserStore> by dataStore(
+    fileName = DATA_STORE_FILE_NAME,
+    serializer = UserStoreSerializer
+)
 
-    suspend fun saveUserColorPreference(alpha: String, color: String) {
+class UserRepository(context: Context) {
+
+    private val protoDataStore: DataStore<UserStore> = context.userDataStore
+
+    suspend fun saveUserColorPreference(alpha: Float, color: String) {
         protoDataStore.updateData { store ->
             store.toBuilder()
                 .setAlpha(alpha)
@@ -18,7 +29,7 @@ class UserRepository(private val protoDataStore: DataStore<UserStore>) {
         }
     }
 
-    suspend fun getUserColorPreference(): Flow<Pair<String, String>> {
+    suspend fun getUserColorPreference(): Flow<Pair<String, Float>> {
         return protoDataStore.data
             .catch { exp ->
                 if (exp is IOException) {
@@ -27,7 +38,7 @@ class UserRepository(private val protoDataStore: DataStore<UserStore>) {
                     throw exp
                 }
             }.map { protoBuilder ->
-                protoBuilder.alpha to protoBuilder.color
+                protoBuilder.color to protoBuilder.alpha
             }
     }
 }
