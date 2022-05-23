@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SeasonSettings(
     val favorite: Seasons = Seasons.SPRING,
-    val knownLocations: PersistentList<Location> = persistentListOf()
+    val knownLocations: List<Location> = emptyList()//PersistentList<Location> = persistentListOf()
 )
 
 @Serializable

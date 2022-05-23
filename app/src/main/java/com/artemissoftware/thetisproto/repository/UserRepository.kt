@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.artemissoftware.thetisproto.UserStore
+import com.artemissoftware.thetisproto.models.Location
 import com.artemissoftware.thetisproto.models.SeasonSettings
 import com.artemissoftware.thetisproto.models.Seasons
 import com.artemissoftware.thetisproto.serializer.SeasonSerializer
 import com.artemissoftware.thetisproto.serializer.UserStoreSerializer
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -55,7 +58,13 @@ class UserRepository(context: Context) {
 
     suspend fun saveSeason(season: Seasons) {
         seasonStore.updateData {
-            it.copy(favorite = season)
+            it.copy(
+                favorite = season,
+                knownLocations = mutableListOf(Location(lat = 12345678.600, lng = 25664125.641))//persistentListOf(Location(lat = 12345678.600, lng = 25664125.641))
+//                    .mutate { locationList ->
+//                        locationList.add(Location(lat = 12345678.600, lng = 25664125.641))
+//                    }
+            )
         }
     }
 
