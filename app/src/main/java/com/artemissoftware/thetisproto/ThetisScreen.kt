@@ -1,6 +1,5 @@
 package com.artemissoftware.thetisproto
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.artemissoftware.thetisproto.composables.AlphaCard
 import com.artemissoftware.thetisproto.composables.ColorCard
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.artemissoftware.thetisproto.composables.SeasonRadioGroup
 
 @ExperimentalMaterialApi
 @Composable
@@ -28,6 +28,11 @@ fun ThetisScreen() {
     val thetisViewModel: ThetisViewModel = viewModel()
     val context = LocalContext.current
     val state = thetisViewModel.stateFlag
+    val sesadon = thetisViewModel.seasonConfig
+
+//    val appSettings = dataStore.data.collectAsState(
+//        initial = AppSettings()
+//    ).value
 
 
     val color = getColor(state.value.first)
@@ -35,6 +40,7 @@ fun ThetisScreen() {
 
     LaunchedEffect(key1 = true) {
         thetisViewModel.getUserPreferences(context)
+        thetisViewModel.getSeason(context = context)
     }
 
 
@@ -67,7 +73,7 @@ fun ThetisScreen() {
             Column {
                 ColorCard(
                     onClick = { color ->
-                        thetisViewModel.saveLanguage(color = color, alpha = selectedAlpha)
+                        thetisViewModel.saveUserPreferences(color = color, alpha = selectedAlpha)
                     },
                     color = Color.Magenta,
                     colorName = "Magenta",
@@ -76,7 +82,7 @@ fun ThetisScreen() {
 
                 ColorCard(
                     onClick = { color ->
-                        thetisViewModel.saveLanguage(color = color, alpha = selectedAlpha)
+                        thetisViewModel.saveUserPreferences(color = color, alpha = selectedAlpha)
                     },
                     color = Color.Cyan,
                     colorName = "Cyan",
@@ -93,7 +99,7 @@ fun ThetisScreen() {
                     alphaValue = 0.1f,
                     onClick = { alpha->
                         selectedAlpha = alpha
-                        thetisViewModel.saveLanguage(color = state.value.first, alpha = alpha)
+                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
                     },
                     isSelected = (0.1f == state.value.second)
                 )
@@ -101,7 +107,7 @@ fun ThetisScreen() {
                     alphaValue = 0.5f,
                     onClick = { alpha->
                         selectedAlpha = alpha
-                        thetisViewModel.saveLanguage(color = state.value.first, alpha = alpha)
+                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
                     },
                     isSelected = (0.5f == state.value.second)
                 )
@@ -109,11 +115,20 @@ fun ThetisScreen() {
                     alphaValue = 1f,
                     onClick = { alpha->
                         selectedAlpha = alpha
-                        thetisViewModel.saveLanguage(color = state.value.first, alpha = alpha)
+                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
                     },
                     isSelected = (1f == state.value.second)
                 )
             }
+            
+            
+            SeasonRadioGroup(
+                onClick = { season ->
+                    thetisViewModel.saveSeason(season)
+                },
+                seasonSettings =sesadon.value
+            )
+            
         }
     }
 

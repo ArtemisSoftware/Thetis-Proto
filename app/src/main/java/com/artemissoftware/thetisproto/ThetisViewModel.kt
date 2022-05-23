@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.thetisproto.models.SeasonSettings
+import com.artemissoftware.thetisproto.models.Seasons
 import com.artemissoftware.thetisproto.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -17,6 +19,10 @@ class ThetisViewModel: ViewModel()  {
     var stateFlag  = mutableStateOf("white" to 1f)
 
 
+    var seasonConfig  = mutableStateOf(SeasonSettings())
+
+
+
     fun getUserPreferences(context: Context){
 
         repository = UserRepository(context = context)
@@ -26,19 +32,37 @@ class ThetisViewModel: ViewModel()  {
             repository.getUserColorPreference().collect { pair ->
 
                 if(pair.first != "") {
-
                     stateFlag.value = pair
                 }
-
             }
+
         }
     }
 
-    fun saveLanguage(color: String, alpha: Float) {
+    fun saveUserPreferences(color: String, alpha: Float) {
         viewModelScope.launch(Dispatchers.Default){
             repository.saveUserColorPreference(color = color, alpha = alpha)
         }
+    }
 
+
+    fun saveSeason(season: Seasons) {
+        viewModelScope.launch(Dispatchers.Default){
+            repository.saveSeason(season)
+        }
+    }
+
+    fun getSeason(context: Context){
+
+        repository = UserRepository(context = context)
+
+        viewModelScope.launch {
+
+            repository.getSeason().collect {
+                seasonConfig.value = it
+            }
+
+        }
     }
 
 }

@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.artemissoftware.thetisproto.UserStore
+import com.artemissoftware.thetisproto.models.SeasonSettings
+import com.artemissoftware.thetisproto.models.Seasons
+import com.artemissoftware.thetisproto.serializer.SeasonSerializer
 import com.artemissoftware.thetisproto.serializer.UserStoreSerializer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,9 +19,15 @@ val Context.userDataStore: DataStore<UserStore> by dataStore(
     serializer = UserStoreSerializer
 )
 
+val Context.seasonStore by dataStore(
+    fileName = "app-settings.json",
+    serializer = SeasonSerializer
+)
+
 class UserRepository(context: Context) {
 
     private val protoDataStore: DataStore<UserStore> = context.userDataStore
+    private val seasonStore: DataStore<SeasonSettings> = context.seasonStore
 
     suspend fun saveUserColorPreference(alpha: Float, color: String) {
         protoDataStore.updateData { store ->
@@ -40,5 +49,17 @@ class UserRepository(context: Context) {
             }.map { protoBuilder ->
                 protoBuilder.color to protoBuilder.alpha
             }
+    }
+
+
+
+    suspend fun saveSeason(season: Seasons) {
+        seasonStore.updateData {
+            it.copy(favorite = season)
+        }
+    }
+
+    suspend fun getSeason(): Flow<SeasonSettings> {
+        return seasonStore.data
     }
 }
