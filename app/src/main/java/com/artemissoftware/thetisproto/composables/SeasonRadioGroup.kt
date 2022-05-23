@@ -19,9 +19,10 @@ fun SeasonRadioGroup(
 ) {
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.Start,
+
     ) {
 
         Seasons.values().forEach { season->

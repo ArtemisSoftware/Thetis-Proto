@@ -16,6 +16,3 @@ data class Location(
     val lng: Double
 )
 
-enum class Seasons {
-    SPRING, SUMMER, AUTUMN, WINTER
-}

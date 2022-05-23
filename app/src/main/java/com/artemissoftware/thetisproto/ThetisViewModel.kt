@@ -35,7 +35,6 @@ class ThetisViewModel: ViewModel()  {
                     stateFlag.value = pair
                 }
             }
-
         }
     }
 
@@ -61,7 +60,6 @@ class ThetisViewModel: ViewModel()  {
             repository.getSeason().collect {
                 seasonConfig.value = it
             }
-
         }
     }
 

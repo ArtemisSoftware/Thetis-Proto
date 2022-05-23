@@ -18,6 +18,9 @@ import com.artemissoftware.thetisproto.composables.AlphaCard
 import com.artemissoftware.thetisproto.composables.ColorCard
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.artemissoftware.thetisproto.composables.SeasonRadioGroup
+import com.artemissoftware.thetisproto.models.Alphas
+import com.artemissoftware.thetisproto.models.Colors
+import com.artemissoftware.thetisproto.models.Seasons
 
 @ExperimentalMaterialApi
 @Composable
@@ -28,12 +31,7 @@ fun ThetisScreen() {
     val thetisViewModel: ThetisViewModel = viewModel()
     val context = LocalContext.current
     val state = thetisViewModel.stateFlag
-    val sesadon = thetisViewModel.seasonConfig
-
-//    val appSettings = dataStore.data.collectAsState(
-//        initial = AppSettings()
-//    ).value
-
+    val favoriteSeason = thetisViewModel.seasonConfig
 
     val color = getColor(state.value.first)
     selectedAlpha = state.value.second
@@ -70,71 +68,104 @@ fun ThetisScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Column {
-                ColorCard(
-                    onClick = { color ->
-                        thetisViewModel.saveUserPreferences(color = color, alpha = selectedAlpha)
-                    },
-                    color = Color.Magenta,
-                    colorName = "Magenta",
-                    isSelected = ("Magenta" == state.value.first)
-                )
-
-                ColorCard(
-                    onClick = { color ->
-                        thetisViewModel.saveUserPreferences(color = color, alpha = selectedAlpha)
-                    },
-                    color = Color.Cyan,
-                    colorName = "Cyan",
-                    isSelected = ("Cyan" == state.value.first)
-                )
-            }
-
+            AvailableColors(
+                onClick = {
+                    thetisViewModel.saveUserPreferences(color = it, alpha = selectedAlpha)
+                },
+                selectedColorName = state.value.first
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Row {
 
-                AlphaCard(
-                    alphaValue = 0.1f,
-                    onClick = { alpha->
-                        selectedAlpha = alpha
-                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
+//                AlphaCard(
+//                    alphaValue = 0.1f,
+//                    onClick = { alpha->
+//                        selectedAlpha = alpha
+//                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
+//                    },
+//                    isSelected = (0.1f == state.value.second)
+//                )
+//                AlphaCard(
+//                    alphaValue = 0.5f,
+//                    onClick = { alpha->
+//                        selectedAlpha = alpha
+//                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
+//                    },
+//                    isSelected = (0.5f == state.value.second)
+//                )
+//                AlphaCard(
+//                    alphaValue = 1f,
+//                    onClick = { alpha->
+//                        selectedAlpha = alpha
+//                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
+//                    },
+//                    isSelected = (1f == state.value.second)
+//                )
+
+
+                AvailableAlphas(
+                    onClick = {
+                        selectedAlpha = it
+                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = it)
                     },
-                    isSelected = (0.1f == state.value.second)
-                )
-                AlphaCard(
-                    alphaValue = 0.5f,
-                    onClick = { alpha->
-                        selectedAlpha = alpha
-                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
-                    },
-                    isSelected = (0.5f == state.value.second)
-                )
-                AlphaCard(
-                    alphaValue = 1f,
-                    onClick = { alpha->
-                        selectedAlpha = alpha
-                        thetisViewModel.saveUserPreferences(color = state.value.first, alpha = alpha)
-                    },
-                    isSelected = (1f == state.value.second)
-                )
+                    selectedAlpha = state.value.second)
+
             }
-            
-            
+
+            Spacer(modifier = Modifier.height(32.dp))
+
             SeasonRadioGroup(
                 onClick = { season ->
                     thetisViewModel.saveSeason(season)
                 },
-                seasonSettings =sesadon.value
+                seasonSettings =favoriteSeason.value
             )
-            
+
         }
     }
-
-
 }
 
+@ExperimentalMaterialApi
+@Composable
+private fun AvailableColors(
+    onClick: (String) -> Unit,
+    selectedColorName: String,
+){
+
+    Colors.values().take(2).forEach {
+
+        ColorCard(
+            onClick = { color ->
+                onClick(color)
+            },
+            color = it.color,
+            colorName = it.colorName,
+            isSelected = (it.colorName == selectedColorName)
+        )
+    }
+}
+
+
+@ExperimentalMaterialApi
+@Composable
+private fun AvailableAlphas(
+    onClick: (Float) -> Unit,
+    selectedAlpha: Float,
+){
+
+    Alphas.values().forEach {
+
+        AlphaCard(
+            alphaValue = it.alpha,
+            onClick = { alpha ->
+                onClick(alpha)
+            },
+            isSelected = (it.alpha == selectedAlpha)
+        )
+    }
+}
 
 private fun getColor(color: String): Color{
     return when (color) {
